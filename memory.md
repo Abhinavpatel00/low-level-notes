@@ -225,4 +225,61 @@ Here are some key aspects of the multi-segment model:
 
 5. **Access Checks:** Access checks extend beyond merely verifying that an address falls within the segment's limit. They also involve verifying that the operations being performed within a segment are allowed. For instance, code segments can be marked as read-only, and any attempt to write data into them would be denied by the hardware.
 
-the multi-segment model in the x86 architecture utilizes segmentation to create a robust and secure memory management system. It offers fine-grained control over memory access, enabling programs and tasks to operate within their isolated segments while also allowing for shared segments for efficient resource utilization. The access rights and privilege levels provided by segment descriptors, along with hardware-based protection mechanisms, ensure that memory is accessed and modified according to predefined rules, enhancing the reliability and security of the computing system.
+In summary, the multi-segment model in the x86 architecture utilizes segmentation to create a robust and secure memory management system. It offers fine-grained control over memory access, enabling programs and tasks to operate within their isolated segments while also allowing for shared segments for efficient resource utilization. The access rights and privilege levels provided by segment descriptors, along with hardware-based protection mechanisms, ensure that memory is accessed and modified according to predefined rules, enhancing the reliability and security of the computing system.
+
+
+# Intro to 64 bit
+
+In 64-bit mode, the x86 processor largely disables segmentation, resulting in a flat and continuous 64-bit linear-address space. This mode simplifies memory addressing by treating the segment base of CS (Code Segment), DS (Data Segment), ES (Extra Segment), and SS (Stack Segment) as zero, effectively making the linear address equal to the effective address for most operations. However, there are exceptions for the FS (File System) and GS (General Storage) segments.
+
+Here's a breakdown of how segmentation works in 64-bit mode:
+
+1. **Flat Linear Address Space:** In this mode, the processor eliminates the complexity of segmentation by setting the segment base of CS, DS, ES, and SS to zero. As a result, when you calculate a linear address, it is essentially the same as the effective address. This simplifies memory management and addressing for most operations.
+
+2. **FS and GS Segments:** The FS and GS segments are exceptions to this flat model. These segment registers still hold valid segment base addresses. They can be used as additional base registers in linear address calculations. This feature is particularly useful for addressing local data and certain operating system data structures.
+
+3. **Segment Limit Checks:** Unlike in earlier modes, the processor does not perform segment limit checks at runtime in 64-bit mode. In previous x86 modes, the hardware would check if an address falls within the segment's limit, providing a level of protection against memory access violations. However, in 64-bit mode, these checks are largely disabled, and the responsibility for ensuring memory access falls within valid bounds is shifted to software and the operating system.
+
+ system architecture within the protected mode, the processor employs a dual-stage process of address translation to reach a physical address. This process encompasses logical-address translation and linear address space paging.
+
+Even in scenarios where segments are used minimally, each byte within the processor's address space is accessed via a logical address. This logical address comprises a 16-bit segment selector and a 32-bit offset, as depicted in Figure 3-5. The segment selector plays the role of identifying the specific segment in which the byte is situated, while the offset pinpoints the byte's location within the segment, relative to the segment's base address.
+
+Subsequently, the processor undertakes the translation of each logical address into a linear address. A linear address is a 32-bit address located within the processor's linear address space. Similar to the physical address space, this linear address space is a seamless, unsegmented area encompassing a total of 4,294,967,295 bytes, spanning from 0 to FFFFFFFFH. Notably, the linear address space accommodates all the segments and system tables that are defined for a given system.
+
+To effect the translation of a logical address into a linear address, the processor follows a three-step process:
+
+1. It utilizes the offset within the segment selector to locate the segment descriptor corresponding to the segment in either the Global Descriptor Table (GDT) or the Local Descriptor Table (LDT) and then reads this descriptor into the processor. It's essential to perform this step solely when a new segment selector is loaded into a segment register.
+
+2. The processor scrutinizes the segment descriptor, inspecting the access rights and the segment's range to ascertain that the segment is accessible and that the offset falls within the confines of the segment.
+
+3. To culminate the translation, the processor adds the base address of the segment (extracted from the segment descriptor) to the offset. This addition yields a linear address, pinpointing the precise location of the byte in memory.
+
+This  process ensures that logical addresses are successfully translated into corresponding linear addresses, facilitating the retrieval of data from the physical memory for program execution and data manipulation.
+
+Segment selectors play a vital role in the memory management of a protected mode system. These 16-bit identifiers, as illustrated in Figure 3-6, serve as references to segment descriptors that define specific memory segments. A segment selector is composed of several components:
+
+1. **Index (Bits 3 through 15):** This field selects one of the 8,192 descriptors available in either the Global Descriptor Table (GDT) or the Local Descriptor Table (LDT). The processor calculates the precise descriptor by multiplying the index value by 8, representing the number of bytes in a segment descriptor, and then adds this result to the base address of the corresponding descriptor table, which is stored in either the GDTR (Global Descriptor Table Register) or the LDTR (Local Descriptor Table Register), depending on whether the TI (Table Indicator) flag is set or cleared.
+
+2. **TI (Table Indicator) Flag (Bit 2):** This flag determines which descriptor table to use. When cleared, it selects the GDT; when set, it designates the LDT.
+
+3. **Requested Privilege Level (RPL) (Bits 0 and 1):** These bits specify the privilege level of the selector, ranging from 0 (most privileged) to 3 (least privileged). The relationship between the RPL, the Current Privilege Level (CPL) of the executing program or task, and the Descriptor Privilege Level (DPL) of the descriptor that the segment selector points to is detailed in Section 5.5, "Privilege Levels."
+
+It's noteworthy that the first entry within the GDT remains unused by the processor. This particular entry serves as a "null segment selector." When a segment register, except for CS or SS registers, is loaded with a null selector, it doesn't generate an exception. However, if a segment register containing a null selector is used to access memory, an exception, specifically a general-protection exception (#GP), is triggered. A null selector proves valuable for initializing unused segment registers. Yet, loading the CS or SS register with a null segment selector results in the generation of a #GP exception.
+
+While segment selectors are visible to application programs as part of a pointer variable, their values are typically assigned or modified by link editors or linking loaders, not by application programs. This division of responsibility helps maintain the integrity and security of the memory management system.
+
+Moreover, segment registers in the processor are designed to facilitate efficient address translation and minimize coding complexity. There are six segment registers, each associated with a specific type of memory reference, including code, stack, and data. To enable program execution and data manipulation, at least the code-segment (CS), data-segment (DS), and stack-segment (SS) registers must be loaded with valid segment selectors. Additionally, three more data-segment registers (ES, FS, and GS) can be used to make additional data segments accessible to the currently executing program or task.
+
+Notably, for a program to access a particular segment, the corresponding segment selector must be loaded into one of the segment registers. While a system may define numerous segments, only six can be readily available for immediate use. Other segments can be made accessible during program execution by loading their segment selectors into these registers.
+
+Each segment register is composed of a "visible" part and a "hidden" part, sometimes referred to as a "descriptor cache" or a "shadow register." When a segment selector is loaded into the visible part of a segment register, the processor also populates the hidden part of the segment register with essential information from the segment descriptor pointed to by the segment selector. This information encompasses the base address, segment limit, and access control details. This caching of information in the segment register, both visible and hidden, enables the processor to perform address translation efficiently without requiring additional bus cycles to retrieve data from the segment descriptor. However, in systems where multiple processors share the same descriptor tables, it becomes the responsibility of software to reload the segment registers when the descriptor tables undergo modification. Failing to do so may result in the continued use of an outdated segment descriptor cached in a segment register after its memory-resident version has been altered.
+
+Two types of load instructions are available for loading the segment registers:
+
+1. **Direct Load Instructions:** These instructions explicitly reference the segment registers and include operations like MOV, POP, LDS, LES, LSS, LGS, and LFS.
+
+2. **Implied Load Instructions:** These instructions, such as the far-pointer versions of the CALL, JMP, and RET instructions, the SYSENTER and SYSEXIT instructions, and the IRET, INT n, INTO, INT3, and INT1 instructions, modify the contents of the CS register (and sometimes other segment registers) as a byproduct of their operation.
+
+The MOV instruction can also be employed to store the visible part of a segment register in a general-purpose register.
+
+ 
