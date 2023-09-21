@@ -208,7 +208,7 @@ Interestingly, this protected flat model can be enriched with additional complex
 
 The multi-segment memory model, takes full advantage of the segmentation mechanism in the x86 architecture to enforce hardware-based protection for code, data structures, programs, and tasks. In this model, each program or task is allocated its unique set of segment descriptors and associated segments. These segments can either be exclusively private to the assigned program or shared among multiple programs. Hardware controls access to all segments and the execution environments of individual programs running on the system.
 
-![Multi-Segment Model]((https://github.com/abhinavpatel0/knowledge/assets/121202898/34461a1b-aaf6-42e3-9722-7cc109d1140c
+![Multi-Segment Model](https://github.com/abhinavpatel0/knowledge/assets/121202898/34461a1b-aaf6-42e3-9722-7cc109d1140c
 )  
 *Figure from intel manual. Multi-Segment Model*
 
