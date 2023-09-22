@@ -18,9 +18,9 @@ Variable-length encoding, often referred to as VLE or variable-length coding (VL
 The formula for entropy is given by:
 $$\[ H(X) = -\sum_{i=1}^{n} p(x_i) \log_2(p(x_i)) \]$$
 Where:
-- $$\( n \)$$ is the number of symbols in the source alphabet.
-- $$\( x_i \)$$ represents each symbol.
-- $$\( p(x_i) \)$$ is the probability of symbol $$\( x_i \)$$ occurring.
+- $\( n \)$ is the number of symbols in the source alphabet.
+- $\( x_i \)$ represents each symbol.
+- $\( p(x_i) \)$ is the probability of symbol $\( x_i \)$ occurring.
   
 #### Huffman Coding Algorithm
 
