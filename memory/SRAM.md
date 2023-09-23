@@ -1,7 +1,7 @@
 
 # Comprehensive Guide to Static Random-Access Memory (SRAM)
 
-[credit wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/SRAM_Cell_%286_Transistors%29.svg/800px-SRAM_Cell_%286_Transistors%29.svg.png)
+![credit wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/SRAM_Cell_%286_Transistors%29.svg/800px-SRAM_Cell_%286_Transistors%29.svg.png)
 
 Static Random-Access Memory (SRAM) stands as an epitome of digital memory in the world of computing and electronics. With a combination of high-speed, low-latency data storage, and exceptional reliability, SRAM plays an indispensable role in processors, cache memory systems, and numerous other electronic applications. In this comprehensive guide, we'll delve into the intricate workings of SRAM, exploring its architectural nuances, design considerations, advantages, disadvantages, and the pivotal role it occupies in the digital landscape.
 
