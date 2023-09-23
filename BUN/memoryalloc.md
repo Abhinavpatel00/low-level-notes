@@ -1,4 +1,4 @@
-The provided code appears to be a set of function declarations and definitions related to memory management. if you want to have detail understanding then you might look at [this](https://github.com/microsoft/mimalloc) source code of mimalloc library, yes yet another microsoft things.if you have read my note about segmentation and paging and surf internet about it then you are good to go for reading the source code of mimalloc 
+The provided code appears to be a set of function declarations and definitions related to memory management. if you want to have detail understanding then you might look at [this](https://github.com/microsoft/mimalloc) source code of mimalloc library, yes yet another microsoft things.if you have read my note about segmentation and paging and surf internet about it then you are good to go for reading the source code of mimalloc,its a nice to understand what you use , if you dont understand what you use its useless to use what you use , so go and understand this library first 
 
 ### Basics
 1.`anyopaque` is used for type erased pointers.
