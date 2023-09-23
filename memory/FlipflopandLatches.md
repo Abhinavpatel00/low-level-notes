@@ -51,9 +51,7 @@ The behavior of the SR Latch can be summarized in a truth table:
 | 0 | 0 | Q(t) | Q'(t) |
 | 0 | 1 | 0    | 1     |
 | 1 | 0 | 1    | 0     |
-| 
-
-1 | 1 | -    | -     |
+| 1 | 1 | -    | -     |
 
 Here, Q(t) represents the previous state, and Q'(t) represents the complementary state.
 
