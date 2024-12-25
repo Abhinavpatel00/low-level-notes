@@ -1,4 +1,4 @@
-# Memory Management  Segmentation and Paging
+![image](https://github.com/user-attachments/assets/0e28dc3f-73f4-454b-be36-8f83dfc05bc7)![image](https://github.com/user-attachments/assets/b5657726-e43f-4799-8632-0bd9136aa064)# Memory Management  Segmentation and Paging
 
 Processors memory management through two fundamental components: segmentation and paging.
 
@@ -121,7 +121,7 @@ Even more impressively, programs originally designed for older 16-bit processors
 
 # Basic FLAT MODEL
 
-The most straightforward memory model in a computer system is the basic "flat model." In this model, both the operating system and application programs have access to a seamless, unsegmented address space. This approach effectively conceals the underlying segmentation mechanism of the architecture, making it transparent to both system designers and application programmers.
+The most straightforward memory model in a computer system is the basic "flat model." that is what is used by 64 bit processors In this model, both the operating system and application programs have access to a seamless, unsegmented address space. This approach effectively conceals the underlying segmentation mechanism of the architecture, making it transparent to both system designers and application programmers.
 
 When implementing a basic flat memory model using the IA-32 architecture, a minimum of two segment descriptors needs to be created: one for referencing a code segment and another for referencing a data segment. Intriguingly, these segments are both mapped to the entire linear address space, with identical base address values of 0 and segment limits of 4 gigabytes. By setting the segment limit to 4 gigabytes, the segmentation mechanism is cleverly designed to avoid generating exceptions for out-of-limit memory references, even in cases where no physical memory is present at a particular address.
 
@@ -130,7 +130,23 @@ Interestingly, in the physical address space, read-only memory (ROM or EPROM) is
 
 
 **Segment Registers:**
-In the IA-32 architecture, segment registers are an essential part of memory management. These registers include CS (Code Segment), DS (Data Segment), SS (Stack Segment), ES (Extra Segment), FS, and GS. Each of these registers serves a specific purpose in managing memory access.
+most modern systems ignore segment registers as  Segmentation divides memory into logical segments, each with its own base, limit, and attributes.
+Paging divides memory into fixed-size pages (typically 4 KB), mapping virtual addresses to physical addresses through page tables. however segment registers are an essential part of memory management.
+When Segmentation Still Matters:
+FS and GS Registers:
+These segment registers retain their ability to hold non-zero base addresses.
+They are crucial for:
+-Thread-Local Storage (TLS) – Per-thread data.
+-Kernel Structures – Access to CPU-specific data.
+Segmentation plays a role during CPU initialization, bootloaders, and mode switching between legacy 16-bit or 32-bit modes and long mode.
+. These registers include CS (Code Segment), DS (Data Segment), SS (Stack Segment), ES (Extra Segment), FS, and GS. Each of these registers serves a specific purpose in managing memory access but in 64 bit mode only only the CS, FS, and GS segments are recognized by processor where FS and GS are used as base regster for address calculation ,In 64-bit mode, the base address of DS, ES, and SS segments is automatically set to 0.This means that addressing is effectively linear, and the segment registers don’t apply any offsets.flat-memory model consists all segment-base addresses =0 and the segment limits = 4 Gbytes
+- (CS, DS, ES, FS, GS, and SS) -> user mode registers -> used by application and system both
+- (GDT, LDT, IDT, and TR) -> system segments -> used by system only
+
+![Segmentation Diagram](https://github.com/user-attachments/assets/829b5aac-fa9b-4c49-bf3a-2b33c272900c)  
+*Credit: AMD Programmers manual*  
+
+
 
 In the x86 architecture, segment registers play a crucial role in memory management and segmentation. These registers define various segments of memory and control how memory is accessed and protected. Let's delve into each segment register:
 
