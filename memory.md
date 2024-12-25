@@ -1,4 +1,4 @@
-# Memory Management  Segmentation and Paging
+# Memory Management ultimate reference
 
 Processors memory management through two fundamental components: segmentation and paging.
 
