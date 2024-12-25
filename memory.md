@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/0e28dc3f-73f4-454b-be36-8f83dfc05bc7)![image](https://github.com/user-attachments/assets/b5657726-e43f-4799-8632-0bd9136aa064)# Memory Management  Segmentation and Paging
+# Memory Management  Segmentation and Paging
 
 Processors memory management through two fundamental components: segmentation and paging.
 
